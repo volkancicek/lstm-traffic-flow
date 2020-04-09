@@ -1,0 +1,51 @@
+{
+	"data": {
+		"approach_0": {
+			"feature_csv": "..\\..\\thesis\\data\\fcd\\ITA\\Veneto\\Verona\\Verona\\_approach_0.csv"
+		},
+		"approach_1": {
+			"feature_csv": "..\\..\\thesis\\data\\fcd\\ITA\\Veneto\\Verona\\Verona\\_approach_1.csv",
+			"data_file_name": "../data/approach_1_data.csv",
+			"start_timestamp": 1576796429000
+		},
+		"approach_2": {
+			"feature_csv": "..\\..\\..\\thesis\\data\\fcd\\ITA\\Veneto\\Verona\\Verona\\_approach_2.csv"
+		},
+		"labels_path": "..\\..\\thesis\\data\\Verona_Data\\MeasuremetStations30050.rpt",
+		"columns": [
+			"volume_per_hour",
+			"speed_kmh",
+			"travel_time",
+			"vehicle_count"
+		],
+		"target_column" :3,
+		"history_size": 288,
+		"target_range" : 1,
+		"step" : 1,
+		"train_test_split": 0.85,
+		"normalise": true
+	},
+	"model": {
+		"loss": "mse",
+		"optimizer": "adam",
+		"saved_models": "saved_models",
+		"layers": [
+			{
+				"type": "lstm",
+				"neurons": 8,
+				"input_time_steps": 288,
+				"input_dim": 4
+			},
+			{
+				"type": "dense",
+				"neurons": 1,
+				"activation": "linear"
+			}
+		]
+	},
+	"training": {
+		"epochs": 5,
+		"batch_size": 64,
+		"buffer_size": 50
+	}
+}
