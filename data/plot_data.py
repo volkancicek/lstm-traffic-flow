@@ -1,8 +1,25 @@
 import matplotlib.pyplot as plt
 
 
-def denormalize_data(data, data_mean, data_std):
-    return (data * data_std) + data_mean
+def plot_results(predicted_data, true_data):
+    fig = plt.figure(facecolor='white')
+    ax = fig.add_subplot(111)
+    ax.plot(true_data, label='True Data')
+    plt.plot(predicted_data, label='Prediction')
+    plt.legend()
+    plt.show()
+
+
+def plot_results_multiple(predicted_data, true_data, prediction_len):
+    fig = plt.figure(facecolor='white')
+    ax = fig.add_subplot(111)
+    ax.plot(true_data, label='True Data')
+    # Pad the list of predictions to shift it in the graph to it's correct start
+    for i, data in enumerate(predicted_data):
+        padding = [None for p in range(i * prediction_len)]
+        plt.plot(padding + data, label='Prediction')
+        plt.legend()
+    plt.show()
 
 
 def plot_train_history(history, title):
@@ -45,17 +62,7 @@ def show_plot(plot_data, delta, title):
     return plt
 
 
-class PlotData:
-
-    def __init__(self, data_mean, data_std, model):
-        self.mean = data_mean
-        self.std = data_std
-        self.model = model
-
-    def plot_predictions(self, val_data, title):
-        for x, y in val_data:
-            plot = show_plot([denormalize_data(x[0][:, 3].numpy(), self.mean[3], self.std[3]),
-                              denormalize_data(y[0].numpy(), self.mean[3], self.std[3]),
-                              denormalize_data(self.model.predict(x)[0], self.mean[3],
-                                               self.std[3])], 1, title)
-            plot.show()
+def plot_predictions(val_data, prediction, title):
+    for x, y in val_data:
+        plot = show_plot([x[0][:, 3], y[0].numpy(), prediction], 1, title)
+        plot.show()
