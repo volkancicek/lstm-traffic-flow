@@ -3,11 +3,11 @@ import json
 
 
 def main():
-    configs = json.load(open('..\\..\\config.json', 'r'))
+    configs = json.load(open('../config.json', 'r'))
     features_csv_app1 = configs['data']['approach_1']['feature_csv']
     labels_rpt_path = configs['data']['labels_path']
     # start date : 20/12/2019 00:00:00
-    start_timestamp = 1576796429000
+    start_timestamp = configs['data']['approach_1']['start_timestamp']
     # end date: 17/03/2020 06:30:30
     data_size = 25422
     # aggregate per 5 min
