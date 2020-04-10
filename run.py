@@ -38,7 +38,7 @@ def main():
 
     model.evaluate_model(x_val, y_val)
     predictions = model.predict_point_by_point(x_val)
-    plot_results(predictions, y_val)
+    plot_results(data.denormalize_target(predictions), data.denormalize_target(y_val))
     plot_train_history(history, "Training and Validation Loss")
 
 
