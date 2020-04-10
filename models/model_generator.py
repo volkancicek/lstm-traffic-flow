@@ -35,7 +35,7 @@ class Model:
             if layer['type'] == 'dropout':
                 self.model.add(tf.keras.layers.Dropout(dropout_rate))
 
-        self.model.compile(loss=configs['model']['loss'], optimizer=configs['model']['optimizer'], metrics=['acc'])
+        self.model.compile(loss=configs['model']['loss'], optimizer=configs['model']['optimizer'], metrics=['mse', 'mae'])
 
         print('[Model] Model Compiled')
         self.model.summary()
@@ -55,8 +55,8 @@ class Model:
 
         save_file_path = os.path.join(save_dir,
                                       '%s-e%s.h5' % (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(epochs)))
-        model_history = self.model.fit(train_data_single, epochs=epochs, steps_per_epoch=50,  # x_train.shape[0],
-                                       validation_data=val_data_single, validation_steps=10)  # x_val.shape[0])
+        model_history = self.model.fit(train_data_single, epochs=epochs, steps_per_epoch=200,  # x_train.shape[0],
+                                       validation_data=val_data_single, validation_steps=50)  # x_val.shape[0])
         self.model.save(save_file_path)
 
         print('[Model] Training Completed. Model saved as %s' % save_file_path)
