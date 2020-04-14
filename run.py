@@ -3,6 +3,7 @@ from models.model_generator import Model
 from data.process_data import ProcessData
 import json
 from data.plot_data import *
+import datetime as dt
 
 
 def main():
@@ -38,8 +39,12 @@ def main():
 
     model.evaluate_model(x_val, y_val)
     predictions = model.predict_point_by_point(x_val)
-    plot_results(data.denormalize_target(predictions), data.denormalize_target(y_val))
-    plot_train_history(history, "Training and Validation Loss")
+    plot_pred_path = os.path.join(configs['model']['saved_models'],'%s-e%s-pred.png' %
+                                  (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(configs['training']['epochs'])))
+    plot_results(data.denormalize_test_data(predictions), data.denormalize_test_data(y_val), plot_pred_path)
+    plot_loss_path = os.path.join(configs['model']['saved_models'], '%s-e%s-loss.png' %
+                                  (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(configs['training']['epochs'])))
+    plot_train_history(history, "Training and Validation Loss", plot_loss_path)
 
 
 if __name__ == '__main__':

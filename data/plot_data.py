@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 
 
-def plot_results(predicted_data, true_data):
+def plot_results(predicted_data, true_data, path):
     fig = plt.figure(facecolor='white')
     ax = fig.add_subplot(111)
     ax.plot(true_data, label='True Data')
     plt.plot(predicted_data, label='Prediction')
     plt.legend()
+    plt.savefig(path)
     plt.show()
 
 
@@ -22,7 +23,7 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
     plt.show()
 
 
-def plot_train_history(history, title):
+def plot_train_history(history, title, path):
     loss = history.history['loss']
     val_loss = history.history['val_loss']
     epochs = range(len(loss))
@@ -31,7 +32,7 @@ def plot_train_history(history, title):
     plt.plot(epochs, val_loss, 'r', label='Validation loss')
     plt.title(title)
     plt.legend()
-
+    plt.savefig(path)
     plt.show()
 
 
