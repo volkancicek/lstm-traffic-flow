@@ -11,8 +11,11 @@ class ProcessData():
         self.dataset = df.get(cols).values
         self.target_col = target_col
         self.target = self.dataset[:, self.target_col]
-        self.data_mean = self.dataset.mean(axis=0)
-        self.data_std = self.dataset.std(axis=0)
+
+        self.train_data_mean = df.get(cols).values[:self.train_split].mean(axis=0)
+        self.train_data_std = df.get(cols).values[:self.train_split].std(axis=0)
+        self.test_data_mean = df.get(cols).values[self.train_split:].mean(axis=0)
+        self.test_data_std = df.get(cols).values[self.train_split:].std(axis=0)
 
     def get_labeled_data(self, history_length, target_length, step, train_data=True, single_step=False):
         feature_list = []
@@ -35,11 +38,15 @@ class ProcessData():
 
         return np.array(feature_list), np.array(label_list)
 
-    def normalise_data(self):
-        self.dataset = (self.dataset - self.data_mean) / self.data_std
-        self.target = (self.target - self.data_mean[self.target_col]) / self.data_std[self.target_col]
+    def normalize_data(self):
+        train_set = (self.dataset[:self.train_split] - self.train_data_mean) / self.train_data_std
+        test_set = (self.dataset[self.train_split:] - self.test_data_mean) / self.test_data_std
+        train_target = (self.target[:self.train_split] - self.train_data_mean[self.target_col]) \
+                       / self.train_data_std[self.target_col]
+        test_target = (self.target[self.train_split:] - self.test_data_mean[self.target_col]) \
+                      / self.test_data_std[self.target_col]
+        self.dataset = np.concatenate((train_set, test_set))
+        self.target = np.concatenate((train_target, test_target))
 
-    def denormalize_target(self, prediction):
-        return prediction * self.data_std[self.target_col] + self.data_mean[self.target_col]
-
-
+    def denormalize_test_data(self, y):
+        return y * self.test_data_std[self.target_col] + self.test_data_mean[self.target_col]

@@ -1,9 +1,10 @@
-import os
-import numpy as np
 import datetime as dt
-from numpy import newaxis
-from helpers.timer import Timer
+import os
+
+import numpy as np
 import tensorflow as tf
+
+from helpers.timer import Timer
 
 
 class Model:
@@ -35,7 +36,8 @@ class Model:
             if layer['type'] == 'dropout':
                 self.model.add(tf.keras.layers.Dropout(dropout_rate))
 
-        self.model.compile(loss=configs['model']['loss'], optimizer=configs['model']['optimizer'], metrics=['mse', 'mae'])
+        self.model.compile(loss=configs['model']['loss'], optimizer=configs['model']['optimizer'],
+                           metrics=['mse', 'mae'])
 
         print('[Model] Model Compiled')
         self.model.summary()
@@ -47,16 +49,18 @@ class Model:
         print('[Model] Training Started')
         print('[Model] %s epochs, %s batch size' % (epochs, batch_size))
 
-        train_data_single = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-        train_data_single = train_data_single.cache().shuffle(buffer_size).batch(batch_size).repeat()
+        train_data = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+        train_data = train_data.cache().shuffle(buffer_size)
+        train_data = train_data.batch(batch_size, drop_remainder=True).repeat()
 
-        val_data_single = tf.data.Dataset.from_tensor_slices((x_val, y_val))
-        val_data_single = val_data_single.batch(1).repeat()
+        val_data = tf.data.Dataset.from_tensor_slices((x_val, y_val))
+        val_data = val_data.batch(1).repeat()
 
         save_file_path = os.path.join(save_dir,
                                       '%s-e%s.h5' % (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(epochs)))
-        model_history = self.model.fit(train_data_single, epochs=epochs, steps_per_epoch=200,  # x_train.shape[0],
-                                       validation_data=val_data_single, validation_steps=50)  # x_val.shape[0])
+        model_history = self.model.fit(train_data, epochs=epochs, steps_per_epoch=200,  # x_train.shape[0],
+                                       validation_data=val_data,
+                                       validation_steps=50)  # x_val.shape[0])
         self.model.save(save_file_path)
 
         print('[Model] Training Completed. Model saved as %s' % save_file_path)

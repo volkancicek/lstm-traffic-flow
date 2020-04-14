@@ -21,7 +21,7 @@ def main():
     model.build_model(configs)
 
     if configs['data']['normalise']:
-        data.normalise_data()
+        data.normalize_data()
 
     x_train, y_train = data.get_labeled_data(configs['data']['history_size'], configs['data']['target_range'],
                                              configs['data']['step'], train_data=True, single_step=True)
