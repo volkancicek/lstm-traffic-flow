@@ -41,12 +41,8 @@ class ProcessData():
     def normalize_data(self):
         train_set = (self.dataset[:self.train_split] - self.train_data_mean) / self.train_data_std
         test_set = (self.dataset[self.train_split:] - self.test_data_mean) / self.test_data_std
-        train_target = (self.target[:self.train_split] - self.train_data_mean[self.target_col]) \
-                       / self.train_data_std[self.target_col]
-        test_target = (self.target[self.train_split:] - self.test_data_mean[self.target_col]) \
-                      / self.test_data_std[self.target_col]
         self.dataset = np.concatenate((train_set, test_set))
-        self.target = np.concatenate((train_target, test_target))
+        self.target = self.dataset[:, self.target_col]
 
-    def denormalize_test_data(self, y):
+    def denormalize_target(self, y):
         return y * self.test_data_std[self.target_col] + self.test_data_mean[self.target_col]
