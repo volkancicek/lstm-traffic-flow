@@ -3,5 +3,4 @@ venv/
 data/__pycache__/
 helpers/__pycache__/
 models/__pycache__/
-results/
 env/
