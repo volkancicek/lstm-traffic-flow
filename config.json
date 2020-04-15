@@ -26,6 +26,7 @@
 		"normalise": true
 	},
 	"model": {
+		"name" : "lstm_1_layer",
 		"loss": "mse",
 		"optimizer": "adam",
 		"saved_models": "saved_models",

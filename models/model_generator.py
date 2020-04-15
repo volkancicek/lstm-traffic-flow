@@ -43,7 +43,7 @@ class Model:
         self.model.summary()
         timer.stop()
 
-    def train(self, x_train, y_train, x_val, y_val, epochs, batch_size, buffer_size, save_dir):
+    def train(self, x_train, y_train, x_val, y_val, epochs, batch_size, buffer_size, save_dir, name="lstm"):
         timer = Timer()
         timer.start()
         print('[Model] Training Started')
@@ -56,23 +56,26 @@ class Model:
         val_data = tf.data.Dataset.from_tensor_slices((x_val, y_val))
         val_data = val_data.batch(1).repeat()
 
-        save_file_path = os.path.join(save_dir,
-                                      '%s-e%s.h5' % (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), str(epochs)))
-        model_history = self.model.fit(train_data, epochs=epochs, steps_per_epoch=200,  # x_train.shape[0],
-                                       validation_data=val_data,
-                                       validation_steps=50)  # x_val.shape[0])
-        self.model.save(save_file_path)
+        model_path = os.path.join(save_dir, '%s-%s-e%s.h5' %
+                                  (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), name, str(epochs)))
+        model_history = self.model.fit(train_data, epochs=epochs, steps_per_epoch=200,
+                                       # steps_per_epoch=x_train.shape[0], validation_steps=x_val.shape[0],
+                                       validation_data=val_data, validation_steps=50)
+        self.model.save(model_path)
 
-        print('[Model] Training Completed. Model saved as %s' % save_file_path)
+        print('[Model] Training Completed. Model saved as %s' % model_path)
         print('\n [Model] results :', model_history.history)
 
         timer.stop()
         return model_history
 
     def evaluate_model(self, x, y):
-        print('\n# Evaluate on test data')
+        timer = Timer()
+        timer.start()
+        print('\n[Model] Evaluate on test data')
         results = self.model.evaluate(x, y)
         print('test loss :', results)
+        timer.stop()
 
     def predict_point_by_point(self, data):
         timer = Timer()
