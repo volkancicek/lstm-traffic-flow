@@ -5,3 +5,4 @@ saved_models/
 helpers/__pycache__/
 models/__pycache__/
 results/
+env/
