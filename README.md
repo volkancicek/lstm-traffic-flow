@@ -1,6 +1,6 @@
 # lstm-traffic-flow
 
-Traffic flow prediction with RNNN/LSTM  
+Traffic flow prediction with RNN/LSTM  
 
 ## Requirements
 
