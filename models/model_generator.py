@@ -26,9 +26,8 @@ class Model:
             return_seq = layer['return_seq'] if 'return_seq' in layer else False
             input_time_steps = layer['input_time_steps'] if 'input_time_steps' in layer else None
             input_dim = layer['input_dim'] if 'input_dim' in layer else None
+            first_layer = layer['first_layer'] if 'first_layer' in layer else False
 
-            if layer['type'] == 'dense':
-                self.model.add(tf.keras.layers.Dense(neurons, activation=activation))
             if layer['type'] == 'lstm':
                 self.model.add(tf.keras.layers.LSTM(neurons, input_shape=(input_time_steps, input_dim),
                                                     activation='tanh', recurrent_activation='sigmoid', use_bias=True,
@@ -37,8 +36,14 @@ class Model:
                 self.model.add(tf.keras.layers.GRU(neurons, input_shape=(input_time_steps, input_dim),
                                                    activation='tanh', recurrent_activation='sigmoid', use_bias=True,
                                                    return_sequences=return_seq))
+            if layer['type'] == 'rnn':
+                self.model.add(tf.keras.layers.RNN(neurons, input_shape=(input_time_steps, input_dim),
+                                                   activation='tanh', recurrent_activation='sigmoid', use_bias=True,
+                                                   return_sequences=return_seq))
             if layer['type'] == 'dropout':
                 self.model.add(tf.keras.layers.Dropout(dropout_rate))
+            if layer['type'] == 'dense':
+                self.model.add(tf.keras.layers.Dense(neurons, activation=activation))
 
         self.model.compile(loss=configs['models'][0]['loss'], optimizer=configs['models'][0]['optimizer'],
                            metrics=['mse', 'mae'])
@@ -71,8 +76,10 @@ class Model:
         model_path = os.path.join(model_save_dir, '%s-%s-e%s.h5' %
                                   (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), model_name, str(epochs)))
         model_history = self.model.fit(train_data, epochs=epochs, steps_per_epoch=200,
-                                       # steps_per_epoch=x_train.shape[0], validation_steps=x_val.shape[0],
-                                       validation_data=val_data, validation_steps=50)
+                                       # x_train.shape[0],
+                                       validation_steps=50,
+                                       # x_val.shape[0],
+                                       validation_data=val_data)
         self.model.save(model_path)
 
         print('[Model] Training Completed. Model saved as %s' % model_path)
