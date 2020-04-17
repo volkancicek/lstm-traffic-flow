@@ -8,20 +8,13 @@ import datetime as dt
 
 def main():
     configs = json.load(open('config.json', 'r'))
-    data = ProcessData(
-        os.path.join('data', configs['data']['approach_1']['data_file_name']),
-        configs['data']['train_test_split'],
-        configs['data']['columns'],
-        configs['data']['target_column']
-    )
+    data = ProcessData(configs)
 
     if configs['data']['normalise']:
         data.normalize_data()
 
-    x_train, y_train = data.get_labeled_data(configs['data']['history_size'], configs['data']['target_range'],
-                                             configs['data']['step'], train_data=True, single_step=True)
-    x_test, y_test = data.get_labeled_data(configs['data']['history_size'], configs['data']['target_range'],
-                                           configs['data']['step'], train_data=False, single_step=True)
+    x_train, y_train = data.get_labeled_data(train_data=True, single_step=True)
+    x_test, y_test = data.get_labeled_data(train_data=False, single_step=True)
 
     print('Single window of history')
     print(x_train[0])

@@ -1,57 +1,101 @@
 {
-	"data": {
-		"approach_0": {
-			"feature_csv": "#########"
-		},
-		"approach_1": {
-			"feature_csv": "#########",
-			"data_file_name": "../data/approach_1_data.csv",
-			"start_timestamp": 1576796429000
-		},
-		"approach_2": {
-			"feature_csv": "#########"
-		},
-		"labels_path": "#########",
-		"columns": [
-			"volume_per_hour",
-			"speed_kmh",
-			"travel_time",
-			"vehicle_count"
-		],
-		"target_column" :3,
-		"history_size": 288,
-		"target_range" : 1,
-		"step" : 1,
-		"train_test_split": 0.80,
-		"normalise": true
-	},
-	"models": [
-		{
-		"name" : "gru_1_layer",
-		"loss": "mse",
-		"optimizer": "adam",
-		"saved_models": "saved_models",
-		"results": "results",
-		"layers": [
-			{
-				"type": "gru",
-				"neurons": 24,
-				"input_time_steps": 288,
-				"input_dim": 4,
-				"return_seq": false
-			},
-			{
-				"type": "dense",
-				"neurons": 1,
-				"activation": "linear"
-			}
-		]
-	}
-	],
-	"training": {
-		"epochs": 10,
-		"batch_size": 120,
-		"buffer_size": 300,
-		"k_fold_split": 5
-	}
+  "data": {
+    "approach_0": {
+      "feature_csv": "#########"
+    },
+    "approach_1": {
+      "feature_csv": "#########",
+      "data_file_name": "../data/approach_1_data.csv",
+      "start_timestamp": 1576796429000
+    },
+    "approach_2": {
+      "feature_csv": "#########"
+    },
+    "labels_path": "#########",
+    "columns": [
+      "volume_per_hour",
+      "speed_kmh",
+      "travel_time",
+      "vehicle_count"
+    ],
+    "feature_columns": [0,1,2,3],
+    "target_column": 3,
+    "history_size": 288,
+    "target_range": 1,
+    "step": 1,
+    "train_test_split": 0.80,
+    "normalise": true
+  },
+  "models": [
+    {
+      "name": "lstm_1_layer",
+      "loss": "mse",
+      "optimizer": "adam",
+      "saved_models": "saved_models",
+      "results": "results",
+      "layers": [
+        {
+          "type": "lstm",
+          "neurons": 24,
+          "input_time_steps": 288,
+          "input_dim": 4,
+          "return_seq": false
+        },
+        {
+          "type": "dense",
+          "neurons": 1,
+          "activation": "linear"
+        }
+      ]
+    },
+    {
+      "name": "srnn_1_layer",
+      "loss": "mse",
+      "optimizer": "adam",
+      "saved_models": "saved_models",
+      "results": "results",
+      "layers": [
+        {
+          "type": "simple_rnn",
+          "neurons": 24,
+          "input_time_steps": 288,
+          "input_dim": 3,
+          "return_seq": false,
+          "first_layer": true
+        },
+        {
+          "type": "dense",
+          "neurons": 1,
+          "activation": "linear"
+        }
+      ]
+    },
+    {
+      "name": "gru_1_layer",
+      "loss": "mse",
+      "optimizer": "adam",
+      "saved_models": "saved_models",
+      "results": "results",
+      "layers": [
+        {
+          "type": "gru",
+          "neurons": 24,
+          "input_time_steps": 288,
+          "input_dim": 3,
+          "return_seq": false
+        },
+        {
+          "type": "dense",
+          "neurons": 1,
+          "activation": "linear"
+        }
+      ]
+    }
+  ],
+  "training": {
+    "epochs": 10,
+    "batch_size": 120,
+    "buffer_size": 300,
+    "k_fold_split": 5
+  }
 }

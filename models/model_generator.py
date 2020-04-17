@@ -7,6 +7,7 @@ from helpers.timer import Timer
 
 
 class Model:
+    """A class for building, training and evaluating RNN models"""
 
     def __init__(self):
         self.model = tf.keras.models.Sequential()
@@ -26,20 +27,44 @@ class Model:
             return_seq = layer['return_seq'] if 'return_seq' in layer else False
             input_time_steps = layer['input_time_steps'] if 'input_time_steps' in layer else None
             input_dim = layer['input_dim'] if 'input_dim' in layer else None
-            first_layer = layer['first_layer'] if 'first_layer' in layer else False
 
             if layer['type'] == 'lstm':
                 self.model.add(tf.keras.layers.LSTM(neurons, input_shape=(input_time_steps, input_dim),
                                                     activation='tanh', recurrent_activation='sigmoid', use_bias=True,
-                                                    return_sequences=return_seq))
+                                                    kernel_initializer='glorot_uniform',
+                                                    recurrent_initializer='orthogonal', bias_initializer='zeros',
+                                                    unit_forget_bias=True, kernel_regularizer=None,
+                                                    recurrent_regularizer=None, bias_regularizer=None,
+                                                    activity_regularizer=None, kernel_constraint=None,
+                                                    recurrent_constraint=None, bias_constraint=None,
+                                                    dropout=0.0, recurrent_dropout=0.0, implementation=2,
+                                                    return_sequences=return_seq,
+                                                    return_state=False, go_backwards=False, stateful=False,
+                                                    time_major=False, unroll=False))
             if layer['type'] == 'gru':
                 self.model.add(tf.keras.layers.GRU(neurons, input_shape=(input_time_steps, input_dim),
                                                    activation='tanh', recurrent_activation='sigmoid', use_bias=True,
-                                                   return_sequences=return_seq))
-            if layer['type'] == 'rnn':
-                self.model.add(tf.keras.layers.RNN(neurons, input_shape=(input_time_steps, input_dim),
-                                                   activation='tanh', recurrent_activation='sigmoid', use_bias=True,
-                                                   return_sequences=return_seq))
+                                                   kernel_initializer='glorot_uniform',
+                                                   recurrent_initializer='orthogonal', bias_initializer='zeros',
+                                                   kernel_regularizer=None, recurrent_regularizer=None,
+                                                   bias_regularizer=None, activity_regularizer=None,
+                                                   kernel_constraint=None, recurrent_constraint=None,
+                                                   bias_constraint=None, dropout=0.0, recurrent_dropout=0.0,
+                                                   implementation=2,
+                                                   return_sequences=return_seq,
+                                                   return_state=False, go_backwards=False, stateful=False,
+                                                   unroll=False, time_major=False, reset_after=True))
+            if layer['type'] == 'simple_rnn':
+                self.model.add(tf.keras.layers.SimpleRNN(neurons, input_shape=(input_time_steps, input_dim),
+                                                         activation='tanh', use_bias=True,
+                                                         kernel_initializer='glorot_uniform',
+                                                         recurrent_initializer='orthogonal', bias_initializer='zeros',
+                                                         kernel_regularizer=None, recurrent_regularizer=None,
+                                                         bias_regularizer=None, activity_regularizer=None,
+                                                         kernel_constraint=None, recurrent_constraint=None,
+                                                         bias_constraint=None, dropout=0.0, recurrent_dropout=0.0,
+                                                         return_state=False, go_backwards=False, stateful=False,
+                                                         return_sequences=return_seq))
             if layer['type'] == 'dropout':
                 self.model.add(tf.keras.layers.Dropout(dropout_rate))
             if layer['type'] == 'dense':
