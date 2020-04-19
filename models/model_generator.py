@@ -77,7 +77,7 @@ class Model:
         self.model.summary()
         timer.stop()
 
-    def train(self, x_train, y_train, x_val, y_val, configs):
+    def train(self, x_train, y_train, x_val, y_val, k, configs):
         timer = Timer()
         timer.start()
 
@@ -98,8 +98,8 @@ class Model:
         val_data = tf.data.Dataset.from_tensor_slices((x_val, y_val))
         val_data = val_data.batch(1).repeat()
 
-        model_path = os.path.join(model_save_dir, '%s-%s-e%s.h5' %
-                                  (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), model_name, str(epochs)))
+        model_path = os.path.join(model_save_dir, '%s-%s-e%s-k%s.h5' %
+                                  (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), model_name, str(epochs), str(k)))
         model_history = self.model.fit(train_data, epochs=epochs, steps_per_epoch=200,
                                        # x_train.shape[0],
                                        validation_steps=50,
@@ -109,8 +109,8 @@ class Model:
 
         print('[Model] Training Completed. Model saved as %s' % model_path)
 
-        result_path = os.path.join(results_save_dir, '%s-%s-e%s_result.txt' %
-                                   (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), model_name, str(epochs)))
+        result_path = os.path.join(results_save_dir, '%s-%s-e%s-k%s_result.txt' %
+                                   (dt.datetime.now().strftime('%d%m%Y-%H%M%S'), model_name, str(epochs), str(k)))
 
         self.save_result(model_history.history, result_path)
 
@@ -124,7 +124,7 @@ class Model:
         timer.start()
         print('\n[Model] Evaluate on test data')
         results = self.model.evaluate(x, y)
-        print('test loss, mse, mae :', results)
+        print('Evaluation - loss, mse, mae :', results)
         timer.stop()
 
     def predict_point_by_point(self, data):
