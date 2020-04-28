@@ -1,11 +1,18 @@
 import matplotlib.pyplot as plt
 
 
-def plot_results(predicted_data, true_data, path):
+def plot_results(predicted_data, true_data, x_axis_values, path):
     fig = plt.figure(facecolor='white')
     ax = fig.add_subplot(111)
     ax.plot(true_data, label='Ground Truth')
     plt.plot(predicted_data, label='Prediction')
+    plt.xlabel('date', fontsize=18)
+    plt.ylabel('volume per hour', fontsize=16)
+    x_label_count = int(len(x_axis_values) / 96)
+    xi = list(range(x_label_count))
+    xi = [i * 96 for i in xi]
+    x_axes = [x_axis_values[i] for i in xi]
+    plt.xticks(xi, x_axes)
     plt.legend()
     plt.savefig(path)
     plt.show()

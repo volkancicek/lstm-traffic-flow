@@ -13,13 +13,13 @@
     },
     "labels_path": "#########",
     "columns": [
+    "feature_columns": [
       "volume_per_hour",
       "speed_kmh",
       "travel_time",
       "vehicle_count"
     ],
-    "feature_columns": [0,1,2,3],
-    "target_column": 3,
+    "target_column": "vehicle_count",
     "history_size": 288,
     "target_range": 1,
     "step": 1,
@@ -93,9 +93,11 @@
     }
   ],
   "training": {
+    "load_model": false,
+    "load_model_name" : "16042020-123038-lstm_1_layer_48n-e5.h5",
     "epochs": 10,
-    "batch_size": 120,
+    "batch_size": 96,
     "buffer_size": 300,
-    "k_fold_split": 5
+    "k_fold_split": 3
   }
 }
