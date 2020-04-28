@@ -52,7 +52,7 @@ class DataPrepare:
         labels = labels.to_numpy()
         aggregated_features = aggregate_features(features_df, self.start_timestamp, self.aggr_time, self.data_size)
         # remove missing feature indexes from labels. It's needed because there are some missing values at features.
-        labels = np.delete(labels, aggregated_features[4])
+        labels = np.delete(labels, aggregated_features[5])
 
         combined_features = list(
             zip(aggregated_features[0], aggregated_features[1], aggregated_features[2], aggregated_features[3],
