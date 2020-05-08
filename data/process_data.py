@@ -8,7 +8,7 @@ class ProcessData:
 
     def __init__(self, configs):
         self.configs = configs
-        df = pd.read_csv(os.path.join('data', configs['data']['approach_1']['data_file_name']))
+        df = pd.read_csv(os.path.join(configs['data']['base_path'], configs['data']['approach_1']['data_file_name']))
         self.train_split = int(len(df) * configs['data']['train_test_split'])
         self.target_col = configs['data']['target_column']
         self.feature_columns = configs['data']['feature_columns']
@@ -19,8 +19,6 @@ class ProcessData:
         self.train_data_std = self.features[:self.train_split].std(axis=0)
         self.target_mean = self.target[:self.train_split].mean(axis=0)
         self.target_std = self.target[:self.train_split].std(axis=0)
-
-
 
     def get_labeled_data(self, train_data=True, single_step=True):
         history_length = self.configs['data']['history_size']
