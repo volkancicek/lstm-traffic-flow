@@ -1,4 +1,4 @@
-from data.prepare_data import DataPrepare
+from data.prepare_data import PrepareData
 import json
 
 
@@ -12,8 +12,8 @@ def main():
     data_size = 25422
     # aggregate per 5 min
     aggregate_time = 300000
-    dp = DataPrepare(start_timestamp, data_size, features_csv_app1, labels_rpt_path, aggregate_time)
-    dp.save_features_df_to_csv('approach_1_data.csv')
+    data = PrepareData(start_timestamp, data_size, features_csv_app1, labels_rpt_path, aggregate_time)
+    data.save_features_df_to_csv('approach_1_data.csv')
 
 
 if __name__ == '__main__':

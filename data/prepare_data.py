@@ -28,7 +28,7 @@ def aggregate_features(df, begin_time_stamp, aggr_time, aggregate_steps):
     return date_list, timestamp_list, five_min_vol_aggr, five_min_speed_aggr, five_min_tt_aggr, missing_indexes
 
 
-class DataPrepare:
+class PrepareData:
 
     def __init__(self, start_time, data_range, features_path, labels_path, aggregate_time_range):
         self.start_timestamp = start_time
